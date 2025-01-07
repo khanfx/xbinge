@@ -10,15 +10,16 @@ uuid()
     xxd -l 16 -p /dev/urandom
 }
 
-url="http://localhost:3000/items"
+url="http://localhost:3000/schedules"
 
 json=$(cat <<EOF
 {
-    "uuid": "$(uuid)",
-    "name": "Hello World"
+    "id": "$(uuid)",
+    "name": "The Expanse",
+    "episodes": []
 }
 EOF
 )
 
 echo Generating request with $json
-curl $url -H "Content-Type: application/json" -d "$json"
+curl -v $url -H "Content-Type: application/json" -d "$json"

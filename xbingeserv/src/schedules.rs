@@ -6,9 +6,17 @@ use axum::{
 use sqlx::{Pool, Postgres};
 
 #[derive(Debug, Deserialize)]
+pub struct Episode {
+    id: String,
+    name: String,
+    watch_date: String,
+}
+
+#[derive(Debug, Deserialize)]
 pub struct PostScheduleRequest {
     id: String,
     name: String,
+    episodes: Vec<Episode>,
 }
 
 #[derive(Debug, Serialize)]
