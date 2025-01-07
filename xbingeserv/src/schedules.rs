@@ -3,23 +3,26 @@ use axum::{
     Json,
     http::StatusCode
 };
-use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
+use sqlx::{Pool, Postgres};
 
 #[derive(Debug, Deserialize)]
-pub struct CreateItem {
+pub struct PostScheduleRequest {
+    id: String,
     name: String,
 }
 
 #[derive(Debug, Serialize)]
-pub struct ItemResponse {
-    id: i32,
+pub struct ScheduleResponse {
+    id: String,
     name: String,
 }
 
-pub async fn create_item(
+pub async fn post_schedule(
     state: axum::extract::State<Pool<Postgres>>,
-    Json(payload): Json<CreateItem>,
-) -> Result<Json<ItemResponse>, (StatusCode, String)> {
+    Json(payload): Json<PostScheduleRequest>,
+) -> Result<Json<ScheduleResponse>, (StatusCode, String)> {
+
+    println!("Processing post_schedule request");
 
     let mut conn = state.acquire().await.map_err(|e| {
         (
@@ -29,12 +32,10 @@ pub async fn create_item(
     })?;
 
 
-    let name = payload.name;
-
-    // Insert the item into the database
     let row = sqlx::query!(
-        "INSERT INTO items (name) VALUES ($1) RETURNING id, name",
-        name
+        "INSERT INTO schedules (id, name) VALUES ($1, $2) RETURNING id, name",
+        payload.id,
+        payload.name
     )
 
     // Results in error:
@@ -46,11 +47,13 @@ pub async fn create_item(
     .map_err(|e| {
         (
             axum::http::StatusCode::INTERNAL_SERVER_ERROR,
-            format!("Failed to insert item: {}", e),
+            format!("Failed to insert schedule: {}", e),
         )
     })?;
 
-    Ok(Json(ItemResponse {
+    println!("Inserted schedule: {:?}", row);
+
+    Ok(Json(ScheduleResponse {
         id: row.id,
         name: row.name,
     }))

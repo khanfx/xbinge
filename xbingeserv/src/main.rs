@@ -3,7 +3,7 @@ use std::net::SocketAddr;
 use axum::{
     routing::post,
     routing::get,
-    Json, Router,
+    Router,
     http::StatusCode
 };
 use sqlx::postgres::PgPoolOptions;
@@ -24,7 +24,7 @@ async fn main() {
 
     // Share the connection pool across handlers
     let app = Router::new()
-        .route("/items", post(schedules::create_item))
+        .route("/schedules", post(schedules::post_schedule))
         .route("/rand", get(get_rand))
         .with_state(pool);
 

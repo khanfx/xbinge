@@ -1,32 +1,14 @@
-DROP TABLE IF EXISTS items;
-
-CREATE TABLE items (
-    id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL
-);
-
-select * from items;
-
-
-
-
--- ----------------------------------------------------
-
 DROP TABLE IF EXISTS subscriptions;
 DROP TABLE IF EXISTS watchers;
 DROP TABLE IF EXISTS episodes;
 DROP TABLE IF EXISTS schedules;
 
 CREATE TABLE watchers (
-    -- id SERIAL PRIMARY KEY,
-    -- slug VARCHAR(255) NOT NULL UNIQUE,
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL
 );
 
 CREATE TABLE schedules (
-    -- id SERIAL PRIMARY KEY,
-    -- slug VARCHAR(255) NOT NULL UNIQUE,
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL
 );
@@ -38,8 +20,6 @@ CREATE TABLE subscriptions (
 );
 
 CREATE TABLE episodes (
-    -- id SERIAL PRIMARY KEY,
-    -- slug VARCHAR(255) NOT NULL UNIQUE,
     id TEXT PRIMARY KEY,
     schedule_id TEXT NOT NULL REFERENCES schedules(id) ON DELETE CASCADE,
     name TEXT NOT NULL,
