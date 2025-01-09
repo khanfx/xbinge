@@ -26,6 +26,13 @@ async fn main() {
     let app = Router::new()
         .route("/schedules", post(schedules::post_schedule))
         .route("/rand", get(get_rand))
+        // doesn't work, probably bc of async
+        // .route("/rand2",
+        //     get(
+        //         || -> Result<String, (StatusCode, String)>
+        //         {
+        //             Ok(util::create_id())
+        //         }))
         .with_state(pool);
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
